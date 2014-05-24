@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
 	  WifiManager wifi;
 	  AdHocEnabler AHE;
 	  private static Camera camera;
+	  private Routing routing;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class MainActivity extends Activity {
 	    ip="192.168.2."+Integer.toString(Math.abs(wifi.getConnectionInfo().getMacAddress().hashCode()%255));
 	    
 	    Log.i("GALDEBUG","my ip :" + ip);
+	    routing = new Routing(ip,this); 
 	    
 		if (wifi.isWifiEnabled() && wifi.getWifiState() != WifiManager.WIFI_STATE_DISABLING)
 			wifi.setWifiEnabled(false);
@@ -229,8 +231,13 @@ public class MainActivity extends Activity {
 		                          if ( jdata != null )
 		                          {
 		                        	  if (start){
-		                        		  
-//			                  				SenderUDP senderUDP = new SenderUDP(target_ip, newTXmsg);
+	                        			  SenderUDP senderUDP = new SenderUDP("192.168.2.255", jdata);                        		  
+		                        		  if (ip.equals("192.168.2.207")){
+		                        			  senderUDP.ChangeTargetIp("192.168.2.96");  
+		                        		  }
+		                        		  if (ip.equals("192.168.2.96")){
+		                        			  senderUDP.ChangeTargetIp("192.168.2.207");  
+		                        		  }
 //			                				try {
 //			                					senderUDP.sendMsg();
 //			                				} catch (IOException e) {

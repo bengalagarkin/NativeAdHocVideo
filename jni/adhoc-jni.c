@@ -110,17 +110,17 @@ int network_coding_on = FALSE;
  *  FUNCTION DECLARATIONS
  */
 void GenerateHelloMsg(char* base_string, NetworkMap* network_head);
-jint Java_com_example_adhocktest_Routing_InitializeMap(JNIEnv* env1, jobject thiz,jstring ip_to_init);
+jint Java_com_example_networkcodingvideo_Routing_InitializeMap(JNIEnv* env1, jobject thiz,jstring ip_to_init);
 MemberInNetwork* GetNode(char* node_ip_to_check, NetworkMap * Network_Head,int maximum_distance_from_originator);
 int UpdateNodeTimer(MemberInNetwork* Node_to_update, int Countdown);
 int AddToNetworkMap(char* node_ip,NetworkMap * Network_Head);
 int RemoveFromNetworkMap(NetworkMap * network_to_remove_from, MemberInNetwork* member_to_remove, int network_is_members_list);
 int DoesNodeExist(char* ip_to_check, NetworkMap* Network_to_check);
-void Java_com_example_adhocktest_SenderUDP_SendUdpJNI( JNIEnv* env, jobject thiz, jstring ip,jint port, jstring message, jint is_broadcast);
+void Java_com_example_networkcodingvideo_SenderUDP_SendUdpJNI( JNIEnv* env, jobject thiz, jstring ip,jint port, jstring message, jint is_broadcast);
 void SendUdpJNI(const char* ip, int port, const char* message, int is_broadcast, int is_source, int msg_len);
-jstring Java_com_example_adhocktest_ReceiverUDP_RecvUdpJNI(JNIEnv* env1, jobject thiz);
+jstring Java_com_example_networkcodingvideo_ReceiverUDP_RecvUdpJNI(JNIEnv* env1, jobject thiz);
 void ProcessHelloMsg(char* buf,int buf_length,NetworkMap* network_to_add_to);
-jstring Java_com_example_adhocktest_Routing_RefreshNetworkMapJNI(JNIEnv* env1, jobject thiz);
+jstring Java_com_example_networkcodingvideo_Routing_RefreshNetworkMapJNI(JNIEnv* env1, jobject thiz);
 void RefreshNetworkMap(NetworkMap* network_to_refresh);
 MemberInNetwork* GetNextHop(NetworkMap* network_to_search ,MemberInNetwork* final_destination);
 int IsNodeForbidden(char* ip_to_check);
@@ -176,7 +176,7 @@ int IsNodeForbidden(char* ip_to_check){
  * InitializeMap.
  */
 jint
-Java_com_example_adhocktest_Routing_InitializeMap(JNIEnv* env1,
+Java_com_example_networkcodingvideo_Routing_InitializeMap(JNIEnv* env1,
         jobject thiz,jstring ip_to_init){
 
 
@@ -453,7 +453,7 @@ int DoesNodeExist(char* ip_to_check, NetworkMap* Network_to_check){
 }
 
 void
-Java_com_example_adhocktest_SenderUDP_SendUdpJNI( JNIEnv* env,
+Java_com_example_networkcodingvideo_SenderUDP_SendUdpJNI( JNIEnv* env,
                                                   jobject thiz, jstring ip,jint port, jstring j_message, jint is_broadcast)
 {
 
@@ -561,7 +561,7 @@ void SendUdpJNI(const char* _ip, int port, const char* message, int is_broadcast
 }
 
 jstring
-Java_com_example_adhocktest_ReceiverUDP_RecvUdpJNI(JNIEnv* env1,
+Java_com_example_networkcodingvideo_ReceiverUDP_RecvUdpJNI(JNIEnv* env1,
         jobject thiz)
 {
 	int PORT = 8888;
@@ -744,7 +744,7 @@ void ProcessHelloMsg(char* buf,int buf_length,NetworkMap* network_to_add_to) {
  * InitializeMap.
  */
 jstring
-Java_com_example_adhocktest_Routing_RefreshNetworkMapJNI(JNIEnv* env1, jobject thiz){
+Java_com_example_networkcodingvideo_Routing_RefreshNetworkMapJNI(JNIEnv* env1, jobject thiz){
 
 	RefreshNetworkMap(MyNetworkMap);
 

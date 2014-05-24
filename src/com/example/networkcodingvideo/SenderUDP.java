@@ -5,6 +5,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+//import com.mainactivity.MainActivity;
+
 import android.util.Log;
 
 public class SenderUDP {
@@ -18,6 +20,7 @@ public class SenderUDP {
 	//TODO: ORDER!!! 
 	private String ip;
 	private String msg;
+	private byte[] byte_array;
 	
 	private DatagramSocket datagramSocket;
 	private int receiverPort = 8888;
@@ -29,6 +32,18 @@ public class SenderUDP {
 	{
 		this.ip = new_ip;
 		this.msg = new_msg;
+	}
+	public void ChangeTargetIp(String new_ip)
+	{
+		this.ip = new_ip;
+	}
+	
+	public SenderUDP(String new_ip, byte[] rec_bytes)
+	{
+		this.ip = new_ip;
+		this.msg = new String(rec_bytes);
+		//this.byte_array = new byte[rec_bytes.length];
+		//System.arraycopy(rec_bytes, 0, byte_array,0, rec_bytes.length);
 	}
 	
 	public String sendMsg() throws IOException // TODO: better understand the try throw mechanism
