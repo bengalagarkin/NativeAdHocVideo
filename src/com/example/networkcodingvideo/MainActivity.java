@@ -10,6 +10,9 @@ import java.text.DecimalFormat;
 //import com.mainactivity.MainActivity;
 //import com.mainactivity.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -45,9 +48,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+//bengal
+import android.widget.Spinner;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnItemSelectedListener {
 
+	private String subnet_prefix;
+	private String my_ip;
+	//////spinner params
+	public Spinner ip_spinner;
+	List<String> ip_array;
+	public ArrayAdapter<String> adapter;
+	private String target_ip;
+	
 	  String Stream;
 	  private String array_tmp[];
 	  String ip;
@@ -330,7 +343,91 @@ public class MainActivity extends Activity {
 	  
 	    }
 	}
+	
+	public boolean resetWifi() {
+		boolean retVal;
+		
+		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		Log.i("MainActivity", "preStartupConfiguration: Try to enable wifi");
+		retVal = wifi.setWifiEnabled(true);
+		if (!retVal) {
+			Log.i("MainActivity", "preStartupConfiguration: Failed to enable wifi");
+			return retVal;
+		}
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+		Log.i("MainActivity", "preStartupConfiguration: Try to disable wifi");
+		retVal = wifi.setWifiEnabled(false);
+		if (!retVal) {
+			Log.i("MainActivity", "preStartupConfiguration: Failed to disable wifi");
+			return retVal;
+		}
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+		Log.i("MainActivity", "preStartupConfiguration: Successfully reset wifi");
+		return retVal;
+	}
+	public boolean preStartupConfiguration() {
+		boolean retVal = true;
 
+		retVal &= resetWifi();		
+		
+		//////// Generate IP
+		subnet_prefix = "192.168.2.";
+		my_ip = subnet_prefix + Integer.toString(Math.abs(wifi.getConnectionInfo().getMacAddress().hashCode() % 255));
+		/////// Init toasts
+		int duration = Toast.LENGTH_SHORT;
+//		toast_my_ip = Toast.makeText(this, my_ip, duration);
+//		toast_sending = Toast.makeText(this, "Sending", duration);
+//		toast_my_ip.show();
+		////// Init layout pointers and spinners
+		initIpSpinner();
+		initLayoutPointers();
 
+		return retVal;
+	}
+	
+	public void initLayoutPointers(){
+//		b_send = (Button) findViewById(R.id.b_send);
+//		b_exit = (Button) findViewById(R.id.b_exit);
+//		
+//		txt_RX = (TextView) findViewById(R.id.txt_RX);
+//		tv_ip = (TextView) findViewById(R.id.tv_ip);
+//		tv_rem_ip = (TextView) findViewById(R.id.tv_rem_ip);
+//		tv_version = (TextView) findViewById(R.id.tv_version);
+//
+//		tv_version.setText("Version 0.0.1");
+//		tv_ip.setText("Local ip: " + my_ip);
 
+	}
+	public void initIpSpinner() {
+		ip_array = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ip_array);
+		ip_spinner = (Spinner) findViewById(R.id.spinner_select_ip);
+		ip_spinner.setAdapter(adapter);
+		ip_spinner.setOnItemSelectedListener(this);
+	}
+	
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		int duration = Toast.LENGTH_SHORT;
+
+		int position = ip_spinner.getSelectedItemPosition();
+		target_ip = ip_array.get(position);
+//		tv_rem_ip.setText("Target ip: " + target_ip);
+		final Toast toast_target_ip_change = Toast.makeText(this, "Target IP changed to " + target_ip, duration);
+		toast_target_ip_change.show();
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// // TODO Auto-generated method stub
+
+	}
 }
